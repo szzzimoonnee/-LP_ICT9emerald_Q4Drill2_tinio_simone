@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heat Index Checker</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            text-align: center;
+        }
+
+        .container {
+            background: #1e1e2f;
+            color: white;
+            width: 350px;
+            margin: 80px auto;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        input {
+            width: 80%;
+            padding: 8px;
+            margin: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #ffcc00;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #resultBox {
+            margin-top: 15px;
+            padding: 10px;
+            background: #333;
+            border-radius: 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Heat Index Checker</h2>
+
+        <p>Temperature (°C)</p>
+        <input type="number" id="temp">
+
+        <p>Humidity (%)</p>
+        <input type="number" id="humidity">
+
+        <br>
+        <button onclick="checkHeat()">Check</button>
+
+        <div id="resultBox"></div>
+    </div>
+
+    <script>
+        function checkHeat() {
+            let t = parseFloat(document.getElementById("temp").value);
+            let h = parseFloat(document.getElementById("humidity").value);
+
+            if (isNaN(t) || isNaN(h)) {
+                alert("Please enter valid numbers!");
+                return;
+            }
+
+            let hi = -8.784695 + (1.61139411 * t) + (2.338549 * h)
+                    - (0.14611605 * t * h)
+                    - (0.012308094 * t * t)
+                    - (0.016424828 * h * h)
+                    + (0.002211732 * t * t * h)
+                    + (0.00072546 * t * h * h)
+                    - (0.000003582 * t * t * h * h);
+
+            let status = "";
+
+            if (hi <= 27) {
+                status = "Comfortable / Cool";
+            } else if (hi <= 32) {
+                status = "Warm";
+            } else if (hi <= 37) {
+                status = "Hot";
+            } else if (hi <= 41) {
+                status = "Very Hot / Caution";
+            } else {
+                status = "Extreme Heat / Danger";
+            }
+
+            let box = document.getElementById("resultBox");
+            box.style.display = "block";
+
+            box.innerHTML = `
+                <p><b>Heat Index:</b> ${hi.toFixed(1)} °C</p>
+                <p><b>Status:</b> ${status}</p>
+            `;
+        }
+    </script>
+
+</body>
+</html>
